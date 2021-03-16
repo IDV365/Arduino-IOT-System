@@ -1,4 +1,5 @@
 //GLOBAL SETTINGS
+#include <secrets.h>
 #define SETTINGS_AMOUNT 5
 #define EEPROM_MAX_SIZE 4
 byte currentSettings[SETTINGS_AMOUNT];
@@ -18,8 +19,8 @@ bool deskState = LOW;
 #include <TimeLib.h>
 #include <WidgetRTC.h>
 #define BLYNK_PRINT Serial
-char auth[] = "PtV3eKfcL0eeWluw9xJpHgFU_w6L-SaM";
 
+char auth[] = "NEO79_k3Zzy1PqnLkNUOMZiIXJmIo3kz";
 
 
 WidgetTable table;
@@ -544,14 +545,14 @@ void setup() {
 void loop() {
   Blynk.run();
   timer.run();
-  timer2.run();  
+  timer2.run();
   timer_fast.run();
   timer_medium.run();
   timer_slow.run();
   wdt_reset();
-  rotary_return();  
-  //oled_graphics("none");  
-  
+  rotary_return();
+  //oled_graphics("none");
+
 }
 
 
