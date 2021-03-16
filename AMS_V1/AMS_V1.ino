@@ -19,7 +19,6 @@ bool deskState = LOW;
 #include <WidgetRTC.h>
 #define BLYNK_PRINT Serial
 
-char auth[] = "NEO79_k3Zzy1PqnLkNUOMZiIXJmIo3kz";
 
 
 WidgetTable table;
