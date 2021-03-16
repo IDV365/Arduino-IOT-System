@@ -1,5 +1,4 @@
 //GLOBAL SETTINGS
-#include <secrets.h>
 #define SETTINGS_AMOUNT 5
 #define EEPROM_MAX_SIZE 4
 byte currentSettings[SETTINGS_AMOUNT];
