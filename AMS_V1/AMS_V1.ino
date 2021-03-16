@@ -12,7 +12,7 @@ int DOOR_triggerpoint = 350;
 bool deskState = LOW;
    
 //BLYNK
-#include <SPI.h>
+#include <SPI.h> 
 #include <Ethernet2.h>
 #include <BlynkSimpleEthernet2.h>
 #include <TimeLib.h> 
