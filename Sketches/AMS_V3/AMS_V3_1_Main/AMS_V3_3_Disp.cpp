@@ -1,7 +1,5 @@
 //U8GLIB
-#define oledGND 37
-#define oledVCC 36
-#include <U8glib.h>
+
 U8GLIB_SH1106_128X64 u8g(U8G_I2C_OPT_DEV_0 | U8G_I2C_OPT_FAST);
 
 void oled_refresh(String selector) {
@@ -119,17 +117,10 @@ void terminal_setup() {
 
 
 //Table
-int rowIndex = 0;
 void update_table(String value) {
+  static int rowIndex = 0;
   String currentTime = String(hour()) + ":" + minute() + ":" + second();
   table.addRow(rowIndex, value, currentTime);
   table.pickRow(rowIndex);
   rowIndex++;
-}
-
-BLYNK_WRITE(V52) {
-  if (param.asInt()) {
-    table.clear();
-    rowIndex = 0;
-  }
 }

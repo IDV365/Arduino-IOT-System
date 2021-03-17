@@ -1,13 +1,10 @@
-#define PIR1_pin 45
-#define DOOR_pin A8
-bool PIR1_state = LOW;
-bool DOOR_state = LOW;
-bool prevPIR1_state = LOW;
-bool prevDOOR_state = LOW;
-int DOOR_value = 0;
-WidgetLED DOOR_led(21);
-WidgetLED PIR1_led(24);
+
 void security_run() {
+  static bool PIR1_state = LOW;
+  static bool DOOR_state = LOW;
+  static bool prevPIR1_state = LOW;
+  static bool prevDOOR_state = LOW;
+  static int DOOR_value = 0;
   String currentTime = String(hour()) + ":" + minute() + ":" + second();
   PIR1_state = digitalRead(PIR1_pin);
   DOOR_value = analogRead(DOOR_pin);
@@ -38,7 +35,6 @@ void security_run() {
   prevDOOR_state = DOOR_state;
 }
 
-#define hallPin A8
 int hall_return() {
   return analogRead(hallPin);
 }
