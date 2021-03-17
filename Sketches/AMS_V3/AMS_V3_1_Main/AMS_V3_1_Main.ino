@@ -9,6 +9,11 @@
 
 */
 
+#include "AMS_V3_3_Disp.h"
+#include "AMS_V3_4_Input.h"
+#include "AMS_V3_5_Sensor.h"
+#include "AMS_V3_6_Other.h"
+#include "AMS_V3_7_Sec.h"
 
 //GLOBAL SETTINGS
 #define SETTINGS_AMOUNT 5
