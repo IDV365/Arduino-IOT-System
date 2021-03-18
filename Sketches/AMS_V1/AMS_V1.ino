@@ -8,7 +8,6 @@ byte flashBrightness = 150;
 int flashTime = 350;
 int DOOR_triggerpoint = 350;
 bool deskState = LOW;
-bool TurnOffAlarm_State = LOW;
 
 
 //BLYNK
@@ -164,9 +163,6 @@ BLYNK_WRITE(V30) {
   deskState =  param.asInt();
   digitalWrite(deskPin, deskState);
 }
-BLYNK_WRITE(V31) {
-  TurnOffAlarm_State =  param.asInt();
-}
 
 
 void control_update() {
@@ -177,13 +173,7 @@ void control_update() {
     Blynk.virtualWrite(V30, deskState);
     Blynk.syncVirtual(V30);
   }
-  bool input2 = Keypad_ask('1');
-  if (input2 == LOW) {
-    TurnOffAlarm_State = !TurnOffAlarm_State;
-    Blynk.syncVirtual(V31);
-  }
 }
-
 
 
 
@@ -304,7 +294,6 @@ void getSettings_fromEEPROM() {
 
 void sync_getEEPROM_setSETTINGS() {
   getSettings_fromEEPROM();
-  TurnOffAlarm_State = currentSettings[1];
   routineInterval = currentSettings[2] * EEPROM_MAX_SIZE;
   flashBrightness = currentSettings[3];
   flashTime = currentSettings[4] * EEPROM_MAX_SIZE;
@@ -312,7 +301,6 @@ void sync_getEEPROM_setSETTINGS() {
 }
 
 void sync_getSETTINGS_setEEPROM() {
-  currentSettings[1] = TurnOffAlarm_State;
   currentSettings[2] = routineInterval / EEPROM_MAX_SIZE;
   currentSettings[3] = flashBrightness;
   currentSettings[4] = flashTime / EEPROM_MAX_SIZE;
@@ -327,7 +315,6 @@ void terminal_help() {
 
   Blynk.virtualWrite(V1, "To get info:");
   Blynk.virtualWrite(V1, "-------------");
-  Blynk.virtualWrite(V1, " - get.TurnOffAlarm_State");
   Blynk.virtualWrite(V1, " - get.connectionState");
   Blynk.virtualWrite(V1, " - get.routineInterval");
   Blynk.virtualWrite(V1, " - get.flashBrightness");
@@ -344,8 +331,6 @@ void terminal_help() {
 
   Blynk.virtualWrite(V1, "To start or stop tasks:");
   Blynk.virtualWrite(V1, "-------------");
-  Blynk.virtualWrite(V1, " - start.oled");
-  Blynk.virtualWrite(V1, " - stop.oled");
   Blynk.virtualWrite(V1, "\n", "\n");
 
   Blynk.virtualWrite(V1, "\n");
@@ -398,19 +383,6 @@ BLYNK_WRITE(V1) {
   if (String("help") == command) {
     terminal_help();
   }
-  else if (String("get.TurnOffAlarm_State") == command) {
-    Blynk.virtualWrite(V1, "Current TurnOffAlarm_State: ");
-    if (TurnOffAlarm_State == HIGH) {
-      Blynk.virtualWrite(V1, "true", "\n");
-    }
-    else {
-      Blynk.virtualWrite(V1, "false", "\n");
-    }
-  }
-  else if (String("start.oled") == command) {
-  }
-  else if (String("start.oled") == command) {
-  }
   else if (String("set.routineSpeed") == command) {
   }
   else if (String("set.flashBrightness") == command) {
@@ -429,6 +401,7 @@ BLYNK_WRITE(V1) {
   sync_getSETTINGS_setEEPROM();
 
 }
+
 
 
 
@@ -464,10 +437,8 @@ void security_run() {
     RGB_flash("Red", 255, 750);
     Blynk.virtualWrite(V23, currentTime);
     update_table("PIR1 triggerd at :");
-    if (TurnOffAlarm_State == HIGH) {
-      deskState = LOW;
-      digitalWrite(deskPin, HIGH);
-    }
+
+
   }
   if (DOOR_state == LOW && prevDOOR_state == HIGH || DOOR_state == HIGH && prevDOOR_state == LOW) {
     Blynk.notify("Door opend or closed");
@@ -503,7 +474,7 @@ void routine_fast() {
 BlynkTimer timer_medium;
 void routine_medium() {
   buttons_refrech();
-  //f digitalWrite(deskRelayPin, deskState);
+ //f digitalWrite(deskRelayPin, deskState);
 }
 
 BlynkTimer timer_slow;
