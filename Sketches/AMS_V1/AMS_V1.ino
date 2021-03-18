@@ -8,7 +8,7 @@ byte flashBrightness = 150;
 int flashTime = 350;
 int DOOR_triggerpoint = 350;
 bool deskState = LOW;
-bool oledState = LOW;
+bool TurnOffAlarm_State = LOW;
 
 
 //BLYNK
@@ -159,17 +159,13 @@ bool Keypad_ask(char ask) {
     return HIGH;
   }
 }
-#define oledGND 37
-#define oledVCC 36
 #define deskPin 38
 BLYNK_WRITE(V30) {
   deskState =  param.asInt();
   digitalWrite(deskPin, deskState);
 }
 BLYNK_WRITE(V31) {
-  oledState =  param.asInt();
-  digitalWrite(oledGND, oledState);
-  digitalWrite(oledVCC, oledState);
+  TurnOffAlarm_State =  param.asInt();
 }
 
 
@@ -181,15 +177,13 @@ void control_update() {
     Blynk.virtualWrite(V30, deskState);
     Blynk.syncVirtual(V30);
   }
-  bool input2 = Keypad_ask('6');
+  bool input2 = Keypad_ask('1');
   if (input2 == LOW) {
-    oledState = !oledState;
-    digitalWrite(oledGND, oledState);
-    digitalWrite(oledVCC, oledState);
-    Blynk.virtualWrite(V31, oledState);
+    TurnOffAlarm_State = !TurnOffAlarm_State;
     Blynk.syncVirtual(V31);
   }
 }
+
 
 
 
@@ -198,15 +192,6 @@ void control_update() {
 #include <U8glib.h>
 U8GLIB_SH1106_128X64 u8g(U8G_I2C_OPT_DEV_0 | U8G_I2C_OPT_FAST);
 
-void oled_refresh(String selector) {
-
-  if (selector == "START") {
-    oledState = LOW;
-  }
-  else if (selector == "STOP") {
-    oledState = HIGH;
-  }
-}
 
 String Weekday[7] = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thunderday", "Friday", "Saterday"};
 
@@ -319,7 +304,7 @@ void getSettings_fromEEPROM() {
 
 void sync_getEEPROM_setSETTINGS() {
   getSettings_fromEEPROM();
-  oledState = currentSettings[1];
+  TurnOffAlarm_State = currentSettings[1];
   routineInterval = currentSettings[2] * EEPROM_MAX_SIZE;
   flashBrightness = currentSettings[3];
   flashTime = currentSettings[4] * EEPROM_MAX_SIZE;
@@ -327,7 +312,7 @@ void sync_getEEPROM_setSETTINGS() {
 }
 
 void sync_getSETTINGS_setEEPROM() {
-  currentSettings[1] = oledState;
+  currentSettings[1] = TurnOffAlarm_State;
   currentSettings[2] = routineInterval / EEPROM_MAX_SIZE;
   currentSettings[3] = flashBrightness;
   currentSettings[4] = flashTime / EEPROM_MAX_SIZE;
@@ -342,7 +327,7 @@ void terminal_help() {
 
   Blynk.virtualWrite(V1, "To get info:");
   Blynk.virtualWrite(V1, "-------------");
-  Blynk.virtualWrite(V1, " - get.oledState");
+  Blynk.virtualWrite(V1, " - get.TurnOffAlarm_State");
   Blynk.virtualWrite(V1, " - get.connectionState");
   Blynk.virtualWrite(V1, " - get.routineInterval");
   Blynk.virtualWrite(V1, " - get.flashBrightness");
@@ -413,9 +398,9 @@ BLYNK_WRITE(V1) {
   if (String("help") == command) {
     terminal_help();
   }
-  else if (String("get.oledState") == command) {
-    Blynk.virtualWrite(V1, "Current oledState: ");
-    if (oledState == HIGH) {
+  else if (String("get.TurnOffAlarm_State") == command) {
+    Blynk.virtualWrite(V1, "Current TurnOffAlarm_State: ");
+    if (TurnOffAlarm_State == HIGH) {
       Blynk.virtualWrite(V1, "true", "\n");
     }
     else {
@@ -423,10 +408,8 @@ BLYNK_WRITE(V1) {
     }
   }
   else if (String("start.oled") == command) {
-    oled_refresh("start");
   }
   else if (String("start.oled") == command) {
-    oled_refresh("stop");
   }
   else if (String("set.routineSpeed") == command) {
   }
@@ -446,7 +429,6 @@ BLYNK_WRITE(V1) {
   sync_getSETTINGS_setEEPROM();
 
 }
-
 
 
 
@@ -482,8 +464,10 @@ void security_run() {
     RGB_flash("Red", 255, 750);
     Blynk.virtualWrite(V23, currentTime);
     update_table("PIR1 triggerd at :");
-
-
+    if (TurnOffAlarm_State == HIGH) {
+      deskState = LOW;
+      digitalWrite(deskPin, HIGH);
+    }
   }
   if (DOOR_state == LOW && prevDOOR_state == HIGH || DOOR_state == HIGH && prevDOOR_state == LOW) {
     Blynk.notify("Door opend or closed");
@@ -519,7 +503,7 @@ void routine_fast() {
 BlynkTimer timer_medium;
 void routine_medium() {
   buttons_refrech();
- //f digitalWrite(deskRelayPin, deskState);
+  //f digitalWrite(deskRelayPin, deskState);
 }
 
 BlynkTimer timer_slow;
@@ -541,8 +525,6 @@ void myTimerEvent() {
 
 void setup() {
   pinMode(deskRelayPin, OUTPUT);
-  pinMode(oledGND, OUTPUT);
-  pinMode(oledVCC, OUTPUT);
   buttons_setup();
   Serial.begin(9600);
   Blynk.begin(auth);
