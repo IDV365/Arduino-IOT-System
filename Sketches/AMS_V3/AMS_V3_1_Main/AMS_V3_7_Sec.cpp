@@ -1,3 +1,4 @@
+#include "AMS_V3_7_Sec.h"
 
 void security_run() {
   static bool PIR1_state = LOW;

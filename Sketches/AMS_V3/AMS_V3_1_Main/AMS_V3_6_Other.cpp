@@ -1,3 +1,4 @@
+#include "AMS_V3_6_Other.h"
 //WATCHDOG TIMER
 
 void(* resetFunc) (void) = 0;

@@ -3,23 +3,22 @@
 #define EEPROM_MAX_SIZE 4
 byte currentSettings[SETTINGS_AMOUNT];
 
+bool oledState = LOW;
 int routineInterval = 1000;
 byte flashBrightness = 150;
 int flashTime = 350;
 int DOOR_triggerpoint = 350;
 bool deskState = LOW;
-bool oledState = LOW;
-
-
+   
 //BLYNK
-#include <SPI.h>
+#include <SPI.h> 
 #include <Ethernet2.h>
 #include <BlynkSimpleEthernet2.h>
-#include <TimeLib.h>
+#include <TimeLib.h> 
 #include <WidgetRTC.h>
 #define BLYNK_PRINT Serial
 
-char auth[] = "NEO79_k3Zzy1PqnLkNUOMZiIXJmIo3kz";
+
 
 WidgetTable table;
 BLYNK_ATTACH_WIDGET(table, V2);
@@ -54,7 +53,6 @@ void RGB_flash(String COLOUR, byte FLASH_BRIGHTNES, int ON_TIME) {
 BLYNK_CONNECTED() {
   rtc.begin();
   RGB_flash("Blue", flashBrightness, flashTime);
-  Blynk.syncVirtual(V30);
 }
 
 int hall_return() {
@@ -159,42 +157,10 @@ bool Keypad_ask(char ask) {
     return HIGH;
   }
 }
-#define oledGND 37
-#define oledVCC 36
-#define deskPin 38
-BLYNK_WRITE(V30) {
-  deskState =  param.asInt();
-  digitalWrite(deskPin, deskState);
-}
-BLYNK_WRITE(V31) {
-  oledState =  param.asInt();
-  digitalWrite(oledGND, oledState);
-  digitalWrite(oledVCC, oledState);
-}
-
-
-void control_update() {
-  bool input1 = Keypad_ask('5');
-  if (input1 == LOW) {
-    deskState = !deskState;
-    digitalWrite(deskPin, deskState);
-    Blynk.virtualWrite(V30, deskState);
-    Blynk.syncVirtual(V30);
-  }
-  bool input2 = Keypad_ask('6');
-  if (input2 == LOW) {
-    oledState = !oledState;
-    digitalWrite(oledGND, oledState);
-    digitalWrite(oledVCC, oledState);
-    Blynk.virtualWrite(V31, oledState);
-    Blynk.syncVirtual(V31);
-  }
-}
-
-
 
 //U8GLIB
-
+#define oledGND 37
+#define oledVCC 36
 #include <U8glib.h>
 U8GLIB_SH1106_128X64 u8g(U8G_I2C_OPT_DEV_0 | U8G_I2C_OPT_FAST);
 
@@ -206,6 +172,8 @@ void oled_refresh(String selector) {
   else if (selector == "STOP") {
     oledState = HIGH;
   }
+  digitalWrite(oledGND, oledState);
+  digitalWrite(oledVCC, oledState);
 }
 
 String Weekday[7] = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thunderday", "Friday", "Saterday"};
@@ -223,6 +191,7 @@ void oled_graphics(String cmd) {
     u8g.print(Time);
 
     int page = rotary_return();
+    Serial.println(page);
     if (page == 2) {
       u8g.drawStr(5, 10, "Temp: ");
       u8g.setPrintPos(35, 10);
@@ -447,7 +416,9 @@ BLYNK_WRITE(V1) {
 
 }
 
-
+BLYNK_WRITE(V51) {
+  oledState =  param.asInt();
+}
 
 
 
@@ -519,7 +490,7 @@ void routine_fast() {
 BlynkTimer timer_medium;
 void routine_medium() {
   buttons_refrech();
- //f digitalWrite(deskRelayPin, deskState);
+  digitalWrite(deskRelayPin, deskState);
 }
 
 BlynkTimer timer_slow;
@@ -537,7 +508,11 @@ void myTimerEvent() {
 
 }
 
-
+void control_update() {
+  if (Keypad_return() == '1') {
+    oledState != oledState;
+  }
+}
 
 void setup() {
   pinMode(deskRelayPin, OUTPUT);
@@ -573,8 +548,7 @@ void loop() {
   timer_slow.run();
   wdt_reset();
   rotary_return();
-
-  control_update();
+  //oled_graphics("none");
 
 }
 

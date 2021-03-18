@@ -1,4 +1,4 @@
-
+#include "AMS_V3_4_Input.h"
 
 //BUTTONS
 void buttons_setup() {
