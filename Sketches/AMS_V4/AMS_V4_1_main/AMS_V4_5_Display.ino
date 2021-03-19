@@ -1,3 +1,4 @@
+//U8glib
 String Weekday[7] = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thunderday", "Friday", "Saterday"};
 
 void oled_graphics(String cmd) {
@@ -40,10 +41,6 @@ void oled_graphics(String cmd) {
 
   } while ( u8g.nextPage() );
 }
-
-
-
-
 
 
 
@@ -97,7 +94,7 @@ void terminal_setup() {
 
 
 
-
+//Terminal Read
 BLYNK_WRITE(V1) {
   String terminalInput = param.asStr();
 

@@ -1,3 +1,15 @@
+//Dallas
+float Dallas_return() {
+  Dallas.requestTemperatures();
+  float temp = Dallas.getTempCByIndex(0);
+  return temp;
+}
+
+
+
+
+
+//DHT
 float DHT_return(char selector) {
   sensors_event_t event;
   dht.temperature().getEvent(&event);
@@ -28,7 +40,6 @@ float BH1750_return() {
 }
 
 //BMP
-
 float BMP_return(char selector) {
   if (selector == 'T') {
     return BMP.readTempC();

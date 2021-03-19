@@ -15,20 +15,30 @@ char auth[] = "NEO79_k3Zzy1PqnLkNUOMZiIXJmIo3kz";
 #include <DHT_U.h>
 #include <BH1750.h>
 #include <Wire.h>
+#include <DallasTemperature.h>
 #include "SparkFunBME280.h"
 #include <EEPROM.h>
 #include <RotaryEncoder.h>
 #include <Keypad.h>
+#include <DallasTemperature.h>
+
 
 //Pin defines
 #define deskPin 38
 #define DHTPIN 49
 #define buttenPinEncoder 4
 #define buttenPinBlackbutton 5
+#define DallasPin 6
+#define hallPin A8
+#define PIR1_pin 45
 
 
 
 //Objects
+OneWire oneWire(DallasPin);
+DallasTemperature Dallas(&oneWire);
+
+
 WidgetTable table;
 BLYNK_ATTACH_WIDGET(table, V2);
 
@@ -77,10 +87,10 @@ byte flashBrightness = 150;
 int flashTime = 350;
 int DOOR_triggerpoint = 350;
 bool deskState = LOW;
+bool pirAlarmState = LOW;
 
 
-
-
+//Events and routines
 BlynkTimer timer_fast;
 void routine_fast() {
   control_update();
@@ -89,7 +99,7 @@ void routine_fast() {
 BlynkTimer timer_medium;
 void routine_medium() {
   buttons_refrech();
- //f digitalWrite(deskRelayPin, deskState);
+  //f digitalWrite(deskRelayPin, deskState);
 }
 
 BlynkTimer timer_slow;
@@ -111,9 +121,10 @@ void myTimerEvent() {
 
 
 
-
+//Setup
 void setup() {
   pinMode(deskPin, OUTPUT);
+  digitalWrite(deskPin, LOW);
   buttons_setup();
   Serial.begin(9600);
   Blynk.begin(auth);
@@ -122,6 +133,8 @@ void setup() {
   BMP.beginI2C();
   dht.begin();
   lightMeter.begin();
+  Dallas.begin();
+
 
   encoder.setPosition(1 / ROTARYSTEPS);
 
@@ -135,6 +148,7 @@ void setup() {
   timer_slow.setInterval(4000L, routine_slow);
 }
 
+//Loop
 void loop() {
   Blynk.run();
   timer.run();

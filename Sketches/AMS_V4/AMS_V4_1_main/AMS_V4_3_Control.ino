@@ -1,7 +1,9 @@
+//Buttons IRL
 void buttons_setup() {
   pinMode(buttenPinEncoder, INPUT_PULLUP);
   pinMode(buttenPinBlackbutton, INPUT_PULLUP);
 }
+
 bool encoder_buttonState = false;
 bool buttenPin_blackbutton = false;
 
@@ -19,33 +21,7 @@ void buttons_refrech() {
 }
 
 
-
-
-//ROTARYENCODER
-
-
-int rotary_return() {
-  static int lastPos = -1;
-  encoder.tick();
-
-  int newPos = encoder.getPosition() * ROTARYSTEPS;
-  if (newPos < ROTARYMIN) {
-    encoder.setPosition(ROTARYMIN / ROTARYSTEPS);
-    newPos = ROTARYMIN;
-
-  } else if (newPos > ROTARYMAX) {
-    encoder.setPosition(ROTARYMAX / ROTARYSTEPS);
-    newPos = ROTARYMAX;
-  } // if
-
-  if (lastPos != newPos) {
-    lastPos = newPos;
-    return newPos;
-  }
-}
-
 // KEYPAD
-
 char Keypad_return() {
   char customKey = customKeypad.getKey();
   if (customKey) {
@@ -67,7 +43,7 @@ BLYNK_WRITE(V30) {
   digitalWrite(deskPin, deskState);
 }
 
-
+//Main Button Loop
 void control_update() {
   bool input1 = Keypad_ask('5');
   if (input1 == LOW) {
@@ -75,5 +51,29 @@ void control_update() {
     digitalWrite(deskPin, deskState);
     Blynk.virtualWrite(V30, deskState);
     Blynk.syncVirtual(V30);
+  }
+}
+
+
+
+
+//ROTARYENCODER
+int rotary_return() {
+  static int lastPos = -1;
+  encoder.tick();
+
+  int newPos = encoder.getPosition() * ROTARYSTEPS;
+  if (newPos < ROTARYMIN) {
+    encoder.setPosition(ROTARYMIN / ROTARYSTEPS);
+    newPos = ROTARYMIN;
+
+  } else if (newPos > ROTARYMAX) {
+    encoder.setPosition(ROTARYMAX / ROTARYSTEPS);
+    newPos = ROTARYMAX;
+  } // if
+
+  if (lastPos != newPos) {
+    lastPos = newPos;
+    return newPos;
   }
 }
