@@ -11,14 +11,14 @@ WidgetLED PIR1_led(V24);
 void security_run() {
   String currentTime = String(hour()) + ":" + minute() + ":" + second();
   PIR1_state = digitalRead(PIR1_pin);
-  
+
   if (hall_return() == HIGH) {
     DOOR_led.on();
-  } 
+  }
   else if (hall_return() == LOW) {
     DOOR_led.off();
   }
-  
+
   if (PIR1_state == HIGH) {
     PIR1_led.on();
   } else {
@@ -48,8 +48,11 @@ void update_table(String value) {
   rowIndex++;
 }
 BLYNK_WRITE(V52) {
+
   if (param.asInt()) {
+    String currentTime = String(hour()) + ":" + minute() + ":" + second();
     table.clear();
+    Blynk.virtualWrite(V5, currentTime);
     rowIndex = 0;
   }
 }
