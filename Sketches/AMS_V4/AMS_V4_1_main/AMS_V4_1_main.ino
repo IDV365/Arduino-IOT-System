@@ -32,7 +32,7 @@ char auth[] = "NEO79_k3Zzy1PqnLkNUOMZiIXJmIo3kz";
 #define hallPin A8
 #define PIR1_pin 45
 #define PIR2_pin 44
-
+#define beep_pin 46
 
 
 
@@ -88,9 +88,12 @@ int routineInterval = 1000;
 byte flashBrightness = 150;
 int flashTime = 350;
 int DOOR_triggerpoint = 350;
-bool deskState = LOW;
-bool pirAlarmState = LOW;
 
+//states
+bool deskState = LOW;
+bool pirAlarmState = HIGH;
+bool pir2AlarmState = LOW;
+bool beepState = LOW;
 
 //Events and routines
 BlynkTimer timer_fast;
@@ -127,6 +130,7 @@ void myTimerEvent() {
 
 //Setup
 void setup() {
+  pinMode(beep_pin, OUTPUT);
   pinMode(deskPin, OUTPUT);
   digitalWrite(deskPin, LOW);
   buttons_setup();
@@ -138,6 +142,7 @@ void setup() {
   dht.begin();
   lightMeter.begin();
   Dallas.begin();
+  
 
 
   encoder.setPosition(1 / ROTARYSTEPS);
