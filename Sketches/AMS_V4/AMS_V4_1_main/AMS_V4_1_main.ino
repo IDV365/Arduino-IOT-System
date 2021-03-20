@@ -31,6 +31,8 @@ char auth[] = "NEO79_k3Zzy1PqnLkNUOMZiIXJmIo3kz";
 #define DallasPin 6
 #define hallPin A8
 #define PIR1_pin 45
+#define PIR2_pin 44
+
 
 
 
@@ -94,12 +96,12 @@ bool pirAlarmState = LOW;
 BlynkTimer timer_fast;
 void routine_fast() {
   control_update();
-  security_run();
 }
 BlynkTimer timer_medium;
 void routine_medium() {
   buttons_refrech();
-  //f digitalWrite(deskRelayPin, deskState);
+  security_run();
+  PIR2_control();
 }
 
 BlynkTimer timer_slow;
@@ -113,6 +115,8 @@ void myTimerEvent() {
   Blynk.virtualWrite(V12, BH1750_return());
   Blynk.virtualWrite(V20, hall_return());
   buttons_refrech();
+  Serial.println(digitalRead(PIR2_pin));
+
 
 }
 

@@ -1,16 +1,21 @@
 //Sec sensors
 
 bool PIR1_state = LOW;
+bool PIR2_state = LOW;
 bool DOOR_state = LOW;
 bool prevPIR1_state = LOW;
+bool prevPIR2_state = LOW;
 bool prevDOOR_state = LOW;
 int DOOR_value = 0;
 WidgetLED DOOR_led(V21);
 WidgetLED PIR1_led(V24);
+WidgetLED PIR2_led(V27);
+
 
 void security_run() {
   String currentTime = String(hour()) + ":" + minute() + ":" + second();
   PIR1_state = digitalRead(PIR1_pin);
+  PIR2_state = digitalRead(PIR2_pin);
 
   if (hall_return() == HIGH) {
     DOOR_led.on();
@@ -35,9 +40,33 @@ void security_run() {
   if (DOOR_state == LOW && prevDOOR_state == HIGH || DOOR_state == HIGH && prevDOOR_state == LOW) {
     Blynk.notify("Door opend or closed");
   }
+
+  if (PIR2_state == HIGH) {
+    PIR2_led.on();
+  } else {
+    PIR2_led.off();
+  }
+  if (PIR2_state == HIGH) {
+    Blynk.virtualWrite(V26, currentTime);
+  }
   prevPIR1_state = PIR1_state;
+  prevPIR2_state = PIR2_state;
   prevDOOR_state = DOOR_state;
 }
+
+
+
+//LIGHTED CONTROLED BY PIR
+void PIR2_control() {
+  if (digitalRead(PIR2_pin) == LOW && digitalRead(deskPin) == LOW) {
+    deskState = HIGH;
+    digitalWrite(deskPin, HIGH);
+    Blynk.virtualWrite(V30, HIGH);
+    Blynk.syncVirtual(V30);
+  }
+}
+
+
 
 //Table
 int rowIndex = 0;
