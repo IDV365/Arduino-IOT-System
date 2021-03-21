@@ -96,7 +96,7 @@ int DOOR_triggerpoint = 350;
 //states
 bool deskState = LOW;
 bool pirAlarmState = HIGH;
-bool pir2AlarmState = LOW;
+bool pir2AlarmState = HIGH;
 bool beepState = HIGH;
 bool relay1_state = HIGH;
 bool relay2_state = HIGH;

@@ -63,8 +63,6 @@ void security_run() {
 
 
 
-
-
 //Table
 int rowIndex = 0;
 void update_table(String value) {
