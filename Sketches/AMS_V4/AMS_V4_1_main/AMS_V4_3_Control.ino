@@ -1,3 +1,47 @@
+//LIGHTED CONTROLED BY PIR
+void PIR2_control() {
+  if (digitalRead(PIR2_pin) == LOW && digitalRead(relay1) == HIGH && pir2AlarmState == HIGH) {
+    relay1_state = LOW;
+    digitalWrite(relay1, LOW);
+    Blynk.virtualWrite(V61, LOW);
+    Blynk.syncVirtual(V61);
+  }
+  delay(10);
+  if (digitalRead(PIR2_pin) == LOW && digitalRead(relay2) == HIGH && pir2AlarmState == HIGH) {
+    relay2_state = LOW;
+    digitalWrite(relay2, LOW);
+    Blynk.virtualWrite(V62, LOW);
+    Blynk.syncVirtual(V62);
+  }
+  delay(10);
+
+  if (digitalRead(PIR2_pin) == LOW && digitalRead(relay3) == HIGH && pir2AlarmState == HIGH) {
+    relay3_state = LOW;
+    digitalWrite(relay3, LOW);
+    Blynk.virtualWrite(V63, LOW);
+    Blynk.syncVirtual(V63);
+  }
+  delay(10);
+
+  if (digitalRead(PIR2_pin) == LOW && digitalRead(relay4) == HIGH && pir2AlarmState == HIGH) {
+    relay4_state = LOW;
+    digitalWrite(relay4, LOW);
+    Blynk.virtualWrite(V64, LOW);
+    Blynk.syncVirtual(V64);
+  }
+  delay(10);
+
+  if (digitalRead(PIR2_pin) == LOW && digitalRead(deskPin) == LOW && pir2AlarmState == HIGH) {
+    deskState = HIGH;
+    digitalWrite(deskPin, HIGH);
+    Blynk.virtualWrite(V30, HIGH);
+    Blynk.syncVirtual(V30);
+  }
+}
+
+
+
+
 //Buttons IRL
 void buttons_setup() {
   pinMode(buttenPinEncoder, INPUT_PULLUP);

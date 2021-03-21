@@ -32,9 +32,11 @@ void security_run() {
   if (PIR1_state == HIGH && prevPIR1_state == LOW) {
     if (pirAlarmState == HIGH) {
       Blynk.notify("PIR1 detected intruder in the hallway");
-      digitalWrite(beep_pin, HIGH);
-      delay(500);
-      digitalWrite(beep_pin, LOW);
+      if (beepState == HIGH) {
+        digitalWrite(beep_pin, HIGH);
+        delay(600);
+        digitalWrite(beep_pin, LOW);
+      }
     }
     RGB_flash("Red", 255, 750);
     Blynk.virtualWrite(V23, currentTime);
@@ -43,7 +45,7 @@ void security_run() {
   if (DOOR_state == LOW && prevDOOR_state == HIGH || DOOR_state == HIGH && prevDOOR_state == LOW) {
     Blynk.notify("Door opend or closed");
   }
-  
+
   if (PIR2_state == HIGH) {
     PIR2_led.on();
   } else {
@@ -59,15 +61,7 @@ void security_run() {
 
 
 
-//LIGHTED CONTROLED BY PIR
-void PIR2_control() {
-  if (digitalRead(PIR2_pin) == LOW && digitalRead(deskPin) == LOW && pir2AlarmState == HIGH) {
-    deskState = HIGH;
-    digitalWrite(deskPin, HIGH);
-    Blynk.virtualWrite(V30, HIGH);
-    Blynk.syncVirtual(V30);
-  }
-}
+
 
 
 

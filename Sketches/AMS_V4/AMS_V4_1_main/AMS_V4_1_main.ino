@@ -33,6 +33,10 @@ char auth[] = "NEO79_k3Zzy1PqnLkNUOMZiIXJmIo3kz";
 #define PIR1_pin 45
 #define PIR2_pin 44
 #define beep_pin 46
+#define relay1 30
+#define relay2 31
+#define relay3 32
+#define relay4 33
 
 
 
@@ -93,7 +97,13 @@ int DOOR_triggerpoint = 350;
 bool deskState = LOW;
 bool pirAlarmState = HIGH;
 bool pir2AlarmState = LOW;
-bool beepState = LOW;
+bool beepState = HIGH;
+bool relay1_state = HIGH;
+bool relay2_state = HIGH;
+bool relay3_state = HIGH;
+bool relay4_state = HIGH;
+
+
 
 //Events and routines
 BlynkTimer timer_fast;
@@ -130,6 +140,10 @@ void myTimerEvent() {
 
 //Setup
 void setup() {
+  pinMode(relay1, OUTPUT);
+  pinMode(relay2, OUTPUT);
+  pinMode(relay3, OUTPUT);
+  pinMode(relay4, OUTPUT);
   pinMode(beep_pin, OUTPUT);
   pinMode(deskPin, OUTPUT);
   digitalWrite(deskPin, LOW);
@@ -142,7 +156,7 @@ void setup() {
   dht.begin();
   lightMeter.begin();
   Dallas.begin();
-  
+
 
 
   encoder.setPosition(1 / ROTARYSTEPS);
