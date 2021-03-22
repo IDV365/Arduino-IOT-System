@@ -24,7 +24,6 @@ char auth[] = "NEO79_k3Zzy1PqnLkNUOMZiIXJmIo3kz";
 
 
 //Pin defines
-#define deskPin 38
 #define DHTPIN 49
 #define buttenPinEncoder 4
 #define buttenPinBlackbutton 5
@@ -33,6 +32,7 @@ char auth[] = "NEO79_k3Zzy1PqnLkNUOMZiIXJmIo3kz";
 #define PIR1_pin 45
 #define PIR2_pin 44
 #define beep_pin 46
+#define deskPin 34
 #define relay1 30
 #define relay2 31
 #define relay3 32
@@ -102,19 +102,19 @@ bool relay1_state = HIGH;
 bool relay2_state = HIGH;
 bool relay3_state = HIGH;
 bool relay4_state = HIGH;
-
+bool allRelay_state = LOW;
 
 
 //Events and routines
 BlynkTimer timer_fast;
 void routine_fast() {
-  control_update();
+  key_control();
 }
 BlynkTimer timer_medium;
 void routine_medium() {
   buttons_refrech();
   security_run();
-  PIR2_control();
+  //PIR2_control();
 }
 
 BlynkTimer timer_slow;
@@ -181,7 +181,5 @@ void loop() {
   timer_slow.run();
   wdt_reset();
   rotary_return();
-
-  control_update();
 
 }

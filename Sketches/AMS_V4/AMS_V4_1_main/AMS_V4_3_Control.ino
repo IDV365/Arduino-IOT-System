@@ -85,23 +85,83 @@ bool Keypad_ask(char ask) {
     return HIGH;
   }
 }
-#define deskPin 38
-BLYNK_WRITE(V30) {
-  deskState =  param.asInt();
-  digitalWrite(deskPin, deskState);
-}
-
 
 
 //Main Button Loop
-void control_update() {
-  bool input1 = Keypad_ask('5');
-  if (input1 == LOW) {
+void key_control() {
+  char key_input = Keypad_return();
+
+  if (key_input == '5') {
+    relay1_state = !relay1_state;
+    digitalWrite(relay1, relay1_state);
+    Blynk.virtualWrite(V61, relay1_state);
+    Blynk.syncVirtual(V61);
+  }
+  else if (key_input == '6') {
+    Serial.println("ok");
+
+    relay2_state = !relay2_state;
+    digitalWrite(relay2, relay2_state);
+    Blynk.virtualWrite(V62, relay2_state);
+    Blynk.syncVirtual(V62);
+  }
+  else if (key_input == '7') {
+    relay3_state = !relay3_state;
+    digitalWrite(relay3, relay3_state);
+    Blynk.virtualWrite(V63, relay3_state);
+    Blynk.syncVirtual(V63);
+  }
+  else if (key_input == '8') {
+    relay4_state = !relay4_state;
+    digitalWrite(relay4, relay4_state);
+    Blynk.virtualWrite(V64, relay4_state);
+    Blynk.syncVirtual(V64);
+  }
+  else if (key_input == '9') {
     deskState = !deskState;
     digitalWrite(deskPin, deskState);
     Blynk.virtualWrite(V30, deskState);
     Blynk.syncVirtual(V30);
   }
+  else if (key_input == '1') {          //everything off
+    relay1_state = HIGH;
+    relay2_state = HIGH;
+    relay3_state = HIGH;
+    relay4_state = HIGH;
+    deskState = HIGH;
+
+    Blynk.virtualWrite(V61, HIGH);
+    Blynk.virtualWrite(V62, HIGH);
+    Blynk.virtualWrite(V63, HIGH);
+    Blynk.virtualWrite(V64, HIGH);
+    Blynk.virtualWrite(V30, HIGH);
+
+    Blynk.syncVirtual(V61);
+    Blynk.syncVirtual(V62);
+    Blynk.syncVirtual(V63);
+    Blynk.syncVirtual(V64);
+    Blynk.syncVirtual(V30);
+  }
+  /*
+    if (Keypad_ask('2') == LOW) {           //everything on
+    deskState = !deskState;
+    digitalWrite(deskPin, deskState);
+    Blynk.virtualWrite(V30, deskState);
+    Blynk.syncVirtual(V30);
+    }
+    if (Keypad_ask('3') == LOW) {           //all ligts on
+    deskState = !deskState;
+    digitalWrite(deskPin, deskState);
+    Blynk.virtualWrite(V30, deskState);
+    Blynk.syncVirtual(V30);
+    }
+    if (Keypad_ask('4') == LOW) {         //all ligts off
+    deskState = !deskState;
+    digitalWrite(deskPin, deskState);
+    Blynk.virtualWrite(V30, deskState);
+    Blynk.syncVirtual(V30);
+    }
+  */
 }
 
 
