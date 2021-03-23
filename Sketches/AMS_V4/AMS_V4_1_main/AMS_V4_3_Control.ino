@@ -1,45 +1,47 @@
 //LIGHTED CONTROLED BY PIR
 void PIR2_control() {
-  if (digitalRead(PIR2_pin) == LOW && digitalRead(relay1) == HIGH) {
-    relay1_state = HIGH;
-    digitalWrite(relay1, HIGH);
-    Blynk.virtualWrite(V61, HIGH);
-    Blynk.syncVirtual(V61);
-    delay(50);
+  if (pir2AutoOff_state == HIGH) {
+    if (digitalRead(PIR2_pin) == LOW && digitalRead(relay1) == LOW) {
+      relay1_state = HIGH;
+      digitalWrite(relay1, HIGH);
+      Blynk.virtualWrite(V61, HIGH);
+      Blynk.syncVirtual(V61);
+      delay(50);
 
-  }
-  if (digitalRead(PIR2_pin) == LOW && digitalRead(relay2) == HIGH) {
-    relay2_state = HIGH;
-    digitalWrite(relay2, HIGH);
-    Blynk.virtualWrite(V62, HIGH);
-    Blynk.syncVirtual(V62);
-    delay(50);
+    }
+    if (digitalRead(PIR2_pin) == LOW && digitalRead(relay2) == LOW) {
+      relay2_state = HIGH;
+      digitalWrite(relay2, HIGH);
+      Blynk.virtualWrite(V62, HIGH);
+      Blynk.syncVirtual(V62);
+      delay(50);
 
-  }
+    }
 
-  if (digitalRead(PIR2_pin) == LOW && digitalRead(relay3) == HIGH ) {  //&& pir2AlarmState == HIGH
-    relay3_state = HIGH;
-    digitalWrite(relay3, HIGH);
-    Blynk.virtualWrite(V63, HIGH);
-    Blynk.syncVirtual(V63);
-    delay(50);
+    if (digitalRead(PIR2_pin) == LOW && digitalRead(relay3) == LOW ) {  //&& pir2AlarmState == HIGH
+      relay3_state = HIGH;
+      digitalWrite(relay3, HIGH);
+      Blynk.virtualWrite(V63, HIGH);
+      Blynk.syncVirtual(V63);
+      delay(50);
 
-  }
+    }
 
-  if (digitalRead(PIR2_pin) == LOW && digitalRead(relay4) == HIGH) {
-    relay4_state = HIGH;
-    digitalWrite(relay4, HIGH);
-    Blynk.virtualWrite(V64, HIGH);
-    Blynk.syncVirtual(V64);
-    delay(50);
+    if (digitalRead(PIR2_pin) == LOW && digitalRead(relay4) == LOW) {
+      relay4_state = HIGH;
+      digitalWrite(relay4, HIGH);
+      Blynk.virtualWrite(V64, HIGH);
+      Blynk.syncVirtual(V64);
+      delay(50);
 
-  }
+    }
 
-  if (digitalRead(PIR2_pin) == LOW && digitalRead(deskPin) == HIGH) {
-    deskState = LOW;
-    digitalWrite(deskPin, LOW);
-    Blynk.virtualWrite(V30, LOW);
-    Blynk.syncVirtual(V30);
+    if (digitalRead(PIR2_pin) == LOW && digitalRead(deskPin) == LOW) {
+      deskState = LOW;
+      digitalWrite(deskPin, LOW);
+      Blynk.virtualWrite(V30, LOW);
+      Blynk.syncVirtual(V30);
+    }
   }
 }
 
@@ -142,26 +144,6 @@ void key_control() {
     Blynk.syncVirtual(V64);
     Blynk.syncVirtual(V30);
   }
-  /*
-    if (Keypad_ask('2') == LOW) {           //everything on
-    deskState = !deskState;
-    digitalWrite(deskPin, deskState);
-    Blynk.virtualWrite(V30, deskState);
-    Blynk.syncVirtual(V30);
-    }
-    if (Keypad_ask('3') == LOW) {           //all ligts on
-    deskState = !deskState;
-    digitalWrite(deskPin, deskState);
-    Blynk.virtualWrite(V30, deskState);
-    Blynk.syncVirtual(V30);
-    }
-    if (Keypad_ask('4') == LOW) {         //all ligts off
-    deskState = !deskState;
-    digitalWrite(deskPin, deskState);
-    Blynk.virtualWrite(V30, deskState);
-    Blynk.syncVirtual(V30);
-    }
-  */
 }
 
 

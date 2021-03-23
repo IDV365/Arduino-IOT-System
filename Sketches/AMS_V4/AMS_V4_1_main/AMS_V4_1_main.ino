@@ -1,5 +1,3 @@
-char auth[] = "NEO79_k3Zzy1PqnLkNUOMZiIXJmIo3kz";
-
 
 //Libraries
 #include <SPI.h>
@@ -103,6 +101,7 @@ bool relay2_state = HIGH;
 bool relay3_state = HIGH;
 bool relay4_state = HIGH;
 bool allRelay_state = LOW;
+bool pir2AutoOff_state = LOW;
 
 
 //Events and routines
@@ -114,7 +113,7 @@ BlynkTimer timer_medium;
 void routine_medium() {
   buttons_refrech();
   security_run();
-  //PIR2_control();
+  PIR2_control();
 }
 
 BlynkTimer timer_slow;
@@ -167,7 +166,7 @@ void setup() {
   timer2.setInterval(3000L, checkBlynk);
   timer.setInterval(1000L, myTimerEvent);
   timer_fast.setInterval(1L, routine_fast);
-  timer_medium.setInterval(100L, routine_medium);
+  timer_medium.setInterval(200L, routine_medium);
   timer_slow.setInterval(4000L, routine_slow);
 }
 

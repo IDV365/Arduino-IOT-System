@@ -5,7 +5,6 @@ BLYNK_CONNECTED() {
   Blynk.syncAll();
   rtc.begin();
   RGB_flash("Blue", flashBrightness, flashTime);
-
 }
 
 BLYNK_WRITE(V30) {
@@ -17,6 +16,9 @@ BLYNK_WRITE(V25) {
 }
 BLYNK_WRITE(V28) {
   pir2AlarmState = param.asInt();
+}
+BLYNK_WRITE(V29) {
+  pir2AutoOff_state = param.asInt();
 }
 BLYNK_WRITE(V32) {
   beepState = param.asInt();
