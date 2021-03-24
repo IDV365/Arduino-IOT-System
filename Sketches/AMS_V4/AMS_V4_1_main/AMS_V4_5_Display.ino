@@ -120,8 +120,6 @@ BLYNK_WRITE(V1) {
     valueString = terminalInput.substring(seperator_pos + 1, terminalInput.length());
     value = valueString.toInt();
   }
-  Serial.println(terminalInput);
-  Serial.println(command);
 
   if (String("help") == command) {
     terminal_help();

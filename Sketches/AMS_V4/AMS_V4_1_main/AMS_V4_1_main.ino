@@ -1,3 +1,4 @@
+char auth[] = "U9t1B_3Q_hNEaciGMftBF8M78mlI7lFW";
 
 //Libraries
 #include <SPI.h>
@@ -102,6 +103,12 @@ bool relay3_state = HIGH;
 bool relay4_state = HIGH;
 bool allRelay_state = LOW;
 bool pir2AutoOff_state = LOW;
+bool pir2AutoOn_state = LOW;
+bool relay1Auto_state = LOW;
+bool relay2Auto_state = LOW;
+bool relay3Auto_state = LOW;
+bool relay4Auto_state = LOW;
+bool wallAuto_state = LOW;
 
 
 //Events and routines
@@ -113,7 +120,7 @@ BlynkTimer timer_medium;
 void routine_medium() {
   buttons_refrech();
   security_run();
-  PIR2_control();
+  PIR2_control_V2();
 }
 
 BlynkTimer timer_slow;
@@ -127,7 +134,6 @@ void myTimerEvent() {
   Blynk.virtualWrite(V12, BH1750_return());
   Blynk.virtualWrite(V20, hall_return());
   buttons_refrech();
-  Serial.println(digitalRead(PIR2_pin));
 
 
 }

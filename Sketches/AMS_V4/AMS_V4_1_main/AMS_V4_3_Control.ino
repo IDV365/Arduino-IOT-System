@@ -1,50 +1,89 @@
 //LIGHTED CONTROLED BY PIR
-void PIR2_control() {
-  if (pir2AutoOff_state == HIGH) {
-    if (digitalRead(PIR2_pin) == LOW && digitalRead(relay1) == LOW) {
+void PIR2_control_V2() {
+  if (pir2AutoOff_state == HIGH && digitalRead(PIR2_pin) == LOW) {
+    
+    if (relay1Auto_state == true && digitalRead(relay1) == LOW){
       relay1_state = HIGH;
       digitalWrite(relay1, HIGH);
       Blynk.virtualWrite(V61, HIGH);
       Blynk.syncVirtual(V61);
       delay(50);
-
     }
-    if (digitalRead(PIR2_pin) == LOW && digitalRead(relay2) == LOW) {
+    
+    if (relay2Auto_state == true && digitalRead(relay2) == LOW) {
       relay2_state = HIGH;
       digitalWrite(relay2, HIGH);
       Blynk.virtualWrite(V62, HIGH);
       Blynk.syncVirtual(V62);
       delay(50);
-
     }
 
-    if (digitalRead(PIR2_pin) == LOW && digitalRead(relay3) == LOW ) {  //&& pir2AlarmState == HIGH
+    if (relay3Auto_state == true && digitalRead(relay3) == LOW) {
       relay3_state = HIGH;
       digitalWrite(relay3, HIGH);
       Blynk.virtualWrite(V63, HIGH);
       Blynk.syncVirtual(V63);
       delay(50);
-
     }
 
-    if (digitalRead(PIR2_pin) == LOW && digitalRead(relay4) == LOW) {
+    if (relay4Auto_state == true && digitalRead(relay4) == LOW) {
       relay4_state = HIGH;
       digitalWrite(relay4, HIGH);
       Blynk.virtualWrite(V64, HIGH);
       Blynk.syncVirtual(V64);
       delay(50);
-
     }
 
-    if (digitalRead(PIR2_pin) == LOW && digitalRead(deskPin) == LOW) {
+    if (wallAuto_state == true && digitalRead(deskPin) == LOW) {
       deskState = LOW;
       digitalWrite(deskPin, LOW);
       Blynk.virtualWrite(V30, LOW);
       Blynk.syncVirtual(V30);
     }
   }
-}
 
+  
+  if (pir2AutoOn_state == HIGH && digitalRead(PIR2_pin) == HIGH) {
+    
+    if (relay1Auto_state == true && digitalRead(relay1) == HIGH) {
+      relay1_state = LOW;
+      digitalWrite(relay1, LOW);
+      Blynk.virtualWrite(V61, LOW);
+      Blynk.syncVirtual(V61);
+      delay(50);
+    }
+    if (relay2Auto_state == true && digitalRead(relay2) == HIGH) {
+      relay2_state = LOW;
+      digitalWrite(relay2, LOW);
+      Blynk.virtualWrite(V62, LOW);
+      Blynk.syncVirtual(V62);
+      delay(50);
+    }
+
+    if (relay3Auto_state == true && digitalRead(relay3) == HIGH) {
+      relay3_state = LOW;
+      digitalWrite(relay3, LOW);
+      Blynk.virtualWrite(V63, LOW);
+      Blynk.syncVirtual(V63);
+      delay(50);
+    }
+
+    if (relay4Auto_state == true && digitalRead(relay4) == HIGH) {
+      relay4_state = LOW;
+      digitalWrite(relay4, LOW);
+      Blynk.virtualWrite(V64, LOW);
+      Blynk.syncVirtual(V64);
+      delay(50);
+    }
+
+    if (wallAuto_state == true && digitalRead(deskPin) == LOW) {
+      deskState = HIGH;
+      digitalWrite(deskPin, HIGH);
+      Blynk.virtualWrite(V30, HIGH);
+      Blynk.syncVirtual(V30);
+    }
+  }
+}
 
 
 
@@ -81,7 +120,7 @@ char Keypad_return() {
 bool Keypad_ask(char ask) {
   char customKey = customKeypad.getKey();
   if (customKey == ask) {
-    return LOW;
+    return HIGH;
   }
   else {
     return HIGH;
@@ -100,7 +139,6 @@ void key_control() {
     Blynk.syncVirtual(V61);
   }
   else if (key_input == '6') {
-    Serial.println("ok");
 
     relay2_state = !relay2_state;
     digitalWrite(relay2, relay2_state);
@@ -130,13 +168,13 @@ void key_control() {
     relay2_state = HIGH;
     relay3_state = HIGH;
     relay4_state = HIGH;
-    deskState = HIGH;
+    deskState = LOW;
 
     Blynk.virtualWrite(V61, HIGH);
     Blynk.virtualWrite(V62, HIGH);
     Blynk.virtualWrite(V63, HIGH);
     Blynk.virtualWrite(V64, HIGH);
-    Blynk.virtualWrite(V30, HIGH);
+    Blynk.virtualWrite(V30, LOW);
 
     Blynk.syncVirtual(V61);
     Blynk.syncVirtual(V62);

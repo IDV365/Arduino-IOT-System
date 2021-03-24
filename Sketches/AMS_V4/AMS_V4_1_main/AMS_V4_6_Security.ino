@@ -16,8 +16,7 @@ void security_run() {
   String currentTime = String(hour()) + ":" + minute() + ":" + second();
   PIR1_state = digitalRead(PIR1_pin);
   PIR2_state = digitalRead(PIR2_pin);
-
-  if (hall_return() == HIGH) {
+    if (hall_return() == HIGH) {
     DOOR_led.on();
   }
   else if (hall_return() == LOW) {
